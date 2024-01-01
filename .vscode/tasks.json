@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe сборка активного файла",
+			"command": "g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"${workspaceRoot}/src/*.cpp",
+			
+				"--std=c++17",
+
+				"-I${workspaceRoot}/../dependencies/VulkanSDK/1.3.261.1/Include",
+				"-L${workspaceRoot}/../dependencies/VulkanSDK/1.3.261.1/Lib",
+				"-I${workspaceRoot}/../dependencies/glfw-3.3.8.bin.WIN64/include",
+				"-L${workspaceRoot}/../dependencies/glfw-3.3.8.bin.WIN64/lib-mingw-w64",
+				"-I${workspaceRoot}/../dependencies/glm",
+
+				"-static",
+				"-lvulkan-1",
+				"-lglfw3",
+				"-lgdi32",
+
+				"-o",
+				"${workspaceRoot}/${workspaceFolderBasename}.exe"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"detail": "Задача создана отладчиком."
+		}
+	]
+}
