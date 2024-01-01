@@ -1,0 +1,2 @@
+E:/cpp/dependencies/VulkanSDK/1.3.261.1/Bin/glslc.exe src/shaders/simple_shader.vert -o src/shaders/simple_shader.vert.spv
+E:/cpp/dependencies/VulkanSDK/1.3.261.1/Bin/glslc.exe src/shaders/simple_shader.frag -o src/shaders/simple_shader.frag.spv
