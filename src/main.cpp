@@ -5,13 +5,13 @@
 #include <stdexcept>
 
 int main() {
-    world::App app{};
+  world::App app{};
 
-    try {
-        app.run();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
+  try {
+    app.run();
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << '\n';
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
 }
