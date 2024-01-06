@@ -24,15 +24,54 @@ namespace world {
     vkDeviceWaitIdle(device.device());
   }
 
+  void Serpinskiy(const std::array<glm::vec2, 3> &triangle, int depth, std::vector<Model::Vertex> &vertices) {
+    if(depth == 0) {
+      vertices.push_back(Model::Vertex{triangle[0]});
+      vertices.push_back(Model::Vertex{triangle[1]});
+      vertices.push_back(Model::Vertex{triangle[2]});
+    }
+    else {
+      const std::array<glm::vec2, 3> triangle1 {
+        triangle[0],
+        0.5f*(triangle[0]+triangle[1]),
+        0.5f*(triangle[0]+triangle[2])
+      };
+      const std::array<glm::vec2, 3> triangle2 {
+        0.5f*(triangle[0]+triangle[1]),
+        triangle[1],
+        0.5f*(triangle[1]+triangle[2]),
+      };
+      const std::array<glm::vec2, 3> triangle3 {
+        0.5f*(triangle[0]+triangle[2]),
+        0.5f*(triangle[1]+triangle[2]),
+        triangle[2]
+      };
+      depth--;
+      Serpinskiy(triangle1, depth, vertices);
+      Serpinskiy(triangle2, depth, vertices);
+      Serpinskiy(triangle3, depth, vertices);
+    }
+  }
+
   void App::loadModels() {
+    /*
     std::vector<Model::Vertex> vertices {
       {{0.f, -0.5f}},
       {{0.5f, 0.5f}},
       {{-0.5f, 0.5f}}
     };
+    */
+    const std::array<glm::vec2, 3> triangle {
+      glm::vec2{0.f, -0.5f},
+      glm::vec2{0.5f, 0.5f},
+      glm::vec2{-0.5f, 0.5f}
+    };
+
+    std::vector<Model::Vertex> vertices {};
+    Serpinskiy(triangle, 5, vertices);
+
     model = std::make_unique<Model>(device, vertices);
   }
-
 
   void App::createPipelineLayout() {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
