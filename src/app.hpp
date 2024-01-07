@@ -4,7 +4,7 @@
 #include "pipeline.hpp"
 #include "device.hpp"
 #include "swapchain.hpp"
-#include "model.hpp"
+#include "gameobject.hpp"
 
 #include <memory>
 #include <vector>
@@ -24,7 +24,7 @@ namespace world {
       void run();
 
     private:
-      void loadModels();
+      void loadGameObjects();
       void createPipelineLayout();
       void createPipeline();
       void createCommandBuffers();
@@ -32,6 +32,7 @@ namespace world {
       void drawFrame();
       void recreateSwapChain();
       void recordCommandBuffer(int imageIndex);
+      void renderGameObjects(VkCommandBuffer commandBuffer);
 
       Window window {WIDTH, HEIGHT, "Hello Vulkan!"};
       Device device {window};
@@ -39,6 +40,6 @@ namespace world {
       std::unique_ptr<Pipeline> pipeline;
       VkPipelineLayout pipelineLayout;
       std::vector<VkCommandBuffer> commandBuffers;
-      std::unique_ptr<Model> model;
+      std::vector<GameObject> gameObjects;
   };
 }
