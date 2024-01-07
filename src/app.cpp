@@ -54,13 +54,12 @@ namespace world {
   }
 
   void App::loadModels() {
-    /*
     std::vector<Model::Vertex> vertices {
-      {{0.f, -0.5f}},
-      {{0.5f, 0.5f}},
-      {{-0.5f, 0.5f}}
+      {{0.f, -0.5f}, {1.f, 0.f, 0.f}},
+      {{0.5f, 0.5f}, {0.f, 1.f, 0.f}},
+      {{-0.5f, 0.5f}, {0.f, 0.f, 1.f}}
     };
-    */
+/*
     const std::array<glm::vec2, 3> triangle {
       glm::vec2{0.f, -0.5f},
       glm::vec2{0.5f, 0.5f},
@@ -69,7 +68,7 @@ namespace world {
 
     std::vector<Model::Vertex> vertices {};
     Serpinskiy(triangle, 5, vertices);
-
+*/
     model = std::make_unique<Model>(device, vertices);
   }
 
