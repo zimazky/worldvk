@@ -140,7 +140,7 @@ namespace world {
     configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
     configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
-    configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL;
+    configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL; //VK_POLYGON_MODE_LINE;
     configInfo.rasterizationInfo.lineWidth = 1.f;
     configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;
     configInfo.rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
