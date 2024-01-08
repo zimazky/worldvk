@@ -3,9 +3,33 @@
 #include "model.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <memory>
 
 namespace world {
+
+  struct MoveComponent {
+    glm::vec3 position{};
+    glm::vec3 velocity{};
+    glm::vec3 acceleration{};
+    glm::quat orientation{};
+    glm::vec3 rotationAxis{0.f, 0.f, 1.f};
+    float rotationVelocity = 0.f;
+
+    void update(float dt) {
+      position += dt*velocity;
+      velocity += dt*acceleration;
+      orientation = glm::normalize(glm::rotate(orientation, dt*rotationVelocity, rotationAxis));
+    }
+
+    glm::mat4 mat4() {
+      auto mat = glm::mat4_cast(orientation);
+      mat[3][0] = position.x;
+      mat[3][1] = position.y;
+      mat[3][2] = position.z;
+    }
+  };
+
 
   struct TransformComponent {
     glm::vec3 translation{};
