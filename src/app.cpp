@@ -2,6 +2,7 @@
 
 #include "camera.hpp"
 #include "simplerendersystem.hpp"
+#include "kbcontroller.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -10,12 +11,13 @@
 
 #include <stdexcept>
 #include <array>
+#include <chrono>
+
+#define MAX_FRAME_TIME 0.5f
 
 namespace world {
 
-  App::App() {
-    loadGameObjects();
-  }
+  App::App() { loadGameObjects(); }
 
   App::~App() {}
 
@@ -23,11 +25,23 @@ namespace world {
     SimpleRenderSystem simpleRenderSystem{device, renderer.getSwapChainRenderPass()};
     Camera camera{};
 
+    auto viewerObject = GameObject::createGameObject();
+    KeyboardMovementController cameraController{};
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+
     while (!window.shouldClose()) {
       glfwPollEvents();
 
+      auto newTime = std::chrono::high_resolution_clock::now();
+      float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+      currentTime = newTime;
+      frameTime = glm::min(frameTime, MAX_FRAME_TIME);
+
+      cameraController.moveInPlaneXZ(window.getGLFWwindow(), frameTime, viewerObject);
+      camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
+
       float aspect = renderer.getAspectRatio();
-      //camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
       camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
 
       if(auto commandBuffer = renderer.beginFrame()) {
