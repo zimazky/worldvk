@@ -60,12 +60,19 @@ namespace world {
   }
 
   void App::loadGameObjects() {
-    std::shared_ptr<Model> model = Model::createModelFromFile(device, "../models/smooth_vase.obj");
-    auto cube = GameObject::createGameObject();
-    cube.model = model;
-    cube.transform.translation = {0.f, 0.f, 2.5f};
-    cube.transform.scale = glm::vec3{3.f};
-    gameObjects.push_back(std::move(cube));
+    std::shared_ptr<Model> model = Model::createModelFromFile(device, "../models/flat_vase.obj");
+    auto flatVase = GameObject::createGameObject();
+    flatVase.model = model;
+    flatVase.transform.translation = {-0.9f, 0.5f, 2.5f};
+    flatVase.transform.scale = glm::vec3{6.f, 3.f, 6.f};
+    gameObjects.push_back(std::move(flatVase));
+
+    model = Model::createModelFromFile(device, "../models/smooth_vase.obj");
+    auto smoothVase = GameObject::createGameObject();
+    smoothVase.model = model;
+    smoothVase.transform.translation = {0.9f, 0.5f, 2.5f};
+    smoothVase.transform.scale = glm::vec3{6.f, 3.f, 6.f};
+    gameObjects.push_back(std::move(smoothVase));
   }
 
 }
