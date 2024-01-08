@@ -1,6 +1,6 @@
 include .env
 
-CFLAGS = -std=c++17 -I./src -I$(VULKAN_SDK_PATH)/Include -I${GLFW_PATH}/include
+CFLAGS = -std=c++17 -I./src -I$(VULKAN_SDK_PATH)/Include -I${GLFW_PATH}/include -I$(TINYOBJ_PATH)
 LDFLAGS = -L$(VULKAN_SDK_PATH)/Lib -L${GLFW_PATH}/lib-mingw-w64 -static -lvulkan-1 -lglfw3 -lgdi32
 
 # create list of all spv files and set as dependency

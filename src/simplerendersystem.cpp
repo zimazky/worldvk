@@ -50,8 +50,8 @@ namespace world {
     pipelineConfig.pipelineLayout = pipelineLayout;
     pipeline = std::make_unique<Pipeline>(
       device,
-      "shaders/simple_shader.vert.spv",
-      "shaders/simple_shader.frag.spv",
+      "../src/shaders/simple_shader.vert.spv",
+      "../src/shaders/simple_shader.frag.spv",
       pipelineConfig
     );
   }
