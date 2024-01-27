@@ -1,19 +1,16 @@
 #include "pipeline.hpp"
+
 #include "model.hpp"
 
-#include <fstream>
-#include <stdexcept>
-#include <iostream>
 #include <cassert>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
 
 namespace world {
 
-  Pipeline::Pipeline(
-    Device& device,
-    const std::string& vertFilepath,
-    const std::string& fragFilepath,
-    const PipelineConfigInfo& configInfo) : device{device}
-  {
+  Pipeline::Pipeline(Device& device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo)
+    : device {device} {
     createGraphicsPipeline(vertFilepath, fragFilepath, configInfo);
   }
 
@@ -24,10 +21,8 @@ namespace world {
   }
 
   std::vector<char> Pipeline::readFile(const std::string& filepath) {
-    std::ifstream file{filepath, std::ios::ate | std::ios::binary};
-    if(!file.is_open()) {
-      throw std::runtime_error("Failed to open file: " + filepath);
-    }
+    std::ifstream file {filepath, std::ios::ate | std::ios::binary};
+    if (!file.is_open()) { throw std::runtime_error("Failed to open file: " + filepath); }
     size_t fileSize = static_cast<size_t>(file.tellg());
     std::vector<char> buffer(fileSize);
     file.seekg(0);
@@ -37,17 +32,10 @@ namespace world {
   }
 
   void Pipeline::createGraphicsPipeline(
-    const std::string& vertFilepath,
-    const std::string& fragFilepath,
-    const PipelineConfigInfo& configInfo)
-  {
-
-    assert(
-      configInfo.pipelineLayout != VK_NULL_HANDLE &&
-      "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
-    assert(
-      configInfo.renderPass != VK_NULL_HANDLE &&
-      "Cannot create graphics pipeline: no renderPass provided in configInfo");
+    const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo
+  ) {
+    assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
+    assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
     auto vertCode = readFile(vertFilepath);
     auto fragCode = readFile(fragFilepath);
 
@@ -74,13 +62,13 @@ namespace world {
     auto bindingDescriptions = Model::Vertex::getBindingDescriptions();
     auto attributeDescriptions = Model::Vertex::getAttributeDescriptions();
 
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
+    VkPipelineVertexInputStateCreateInfo vertexInputInfo {VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
     vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
     vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
     vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
 
-    VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};
+    VkGraphicsPipelineCreateInfo pipelineInfo {VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};
     pipelineInfo.stageCount = 2;
     pipelineInfo.pStages = shaderStages;
     pipelineInfo.pVertexInputState = &vertexInputInfo;
@@ -99,25 +87,16 @@ namespace world {
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if(vkCreateGraphicsPipelines(
-      device.device(),
-      VK_NULL_HANDLE,
-      1,
-      &pipelineInfo,
-      nullptr,
-      &graphicsPipeline) != VK_SUCCESS) {
+    if (vkCreateGraphicsPipelines(device.device(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
       throw std::runtime_error("Failed to create graphics pipeline");
     }
   }
 
-  void Pipeline::createShaderModule(
-    const std::vector<char>& code,
-    VkShaderModule* shaderModule)
-  {
-    VkShaderModuleCreateInfo createInfo{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
+  void Pipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
+    VkShaderModuleCreateInfo createInfo {VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
     createInfo.codeSize = code.size();
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
-    if(vkCreateShaderModule(device.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
+    if (vkCreateShaderModule(device.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
       throw std::runtime_error("Failed to create shader module");
     }
   }
@@ -140,7 +119,7 @@ namespace world {
     configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
     configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
-    configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL; //VK_POLYGON_MODE_LINE;
+    configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL; // VK_POLYGON_MODE_LINE;
     configInfo.rasterizationInfo.lineWidth = 1.f;
     configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;
     configInfo.rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
@@ -152,14 +131,13 @@ namespace world {
     configInfo.multisampleInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     configInfo.multisampleInfo.sampleShadingEnable = VK_FALSE;
     configInfo.multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-    configInfo.multisampleInfo.minSampleShading = 1.f;          // Optional
-    configInfo.multisampleInfo.pSampleMask = nullptr;           // Optional
-    configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE;// Optional
-    configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;     // Optional
+    configInfo.multisampleInfo.minSampleShading = 1.f;           // Optional
+    configInfo.multisampleInfo.pSampleMask = nullptr;            // Optional
+    configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE; // Optional
+    configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;      // Optional
 
     configInfo.colorBlendAttachment.colorWriteMask =
-      VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT
-      | VK_COLOR_COMPONENT_A_BIT;
+      VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
     configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Optional
     configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
@@ -170,24 +148,24 @@ namespace world {
 
     configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
-    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY;   // Optional
+    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Optional
     configInfo.colorBlendInfo.attachmentCount = 1;
     configInfo.colorBlendInfo.pAttachments = &configInfo.colorBlendAttachment;
-    configInfo.colorBlendInfo.blendConstants[0] = 0.f;      // Optional
-    configInfo.colorBlendInfo.blendConstants[1] = 0.f;      // Optional
-    configInfo.colorBlendInfo.blendConstants[2] = 0.f;      // Optional
-    configInfo.colorBlendInfo.blendConstants[3] = 0.f;      // Optional
+    configInfo.colorBlendInfo.blendConstants[0] = 0.f; // Optional
+    configInfo.colorBlendInfo.blendConstants[1] = 0.f; // Optional
+    configInfo.colorBlendInfo.blendConstants[2] = 0.f; // Optional
+    configInfo.colorBlendInfo.blendConstants[3] = 0.f; // Optional
 
     configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
     configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
     configInfo.depthStencilInfo.depthCompareOp = VK_COMPARE_OP_LESS;
     configInfo.depthStencilInfo.depthBoundsTestEnable = VK_FALSE;
-    configInfo.depthStencilInfo.minDepthBounds = 0.f;   // Optional
-    configInfo.depthStencilInfo.maxDepthBounds = 1.f;   // Optional
+    configInfo.depthStencilInfo.minDepthBounds = 0.f; // Optional
+    configInfo.depthStencilInfo.maxDepthBounds = 1.f; // Optional
     configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
-    configInfo.depthStencilInfo.front = {};             // Optional
-    configInfo.depthStencilInfo.back = {};              // Optional
+    configInfo.depthStencilInfo.front = {}; // Optional
+    configInfo.depthStencilInfo.back = {};  // Optional
 
     configInfo.dynamicStateEnables = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
     configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -195,4 +173,4 @@ namespace world {
     configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
     configInfo.dynamicStateInfo.flags = 0;
   }
-}
+} // namespace world

@@ -1,17 +1,16 @@
 #include "app.hpp"
 
 #include "camera.hpp"
-#include "simplerendersystem.hpp"
 #include "kbcontroller.hpp"
+#include "simplerendersystem.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
-
-#include <stdexcept>
 #include <array>
 #include <chrono>
+#include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
+#include <stdexcept>
 
 #define MAX_FRAME_TIME 0.5f
 
@@ -19,14 +18,14 @@ namespace world {
 
   App::App() { loadGameObjects(); }
 
-  App::~App() {}
+  App::~App() = default;
 
   void App::run() {
-    SimpleRenderSystem simpleRenderSystem{device, renderer.getSwapChainRenderPass()};
-    Camera camera{};
+    SimpleRenderSystem simpleRenderSystem {device, renderer.getSwapChainRenderPass()};
+    Camera camera {};
 
     auto viewerObject = GameObject::createGameObject();
-    KeyboardMovementController cameraController{};
+    KeyboardMovementController cameraController {};
 
     auto currentTime = std::chrono::high_resolution_clock::now();
 
@@ -44,8 +43,7 @@ namespace world {
       float aspect = renderer.getAspectRatio();
       camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
 
-      if(auto commandBuffer = renderer.beginFrame()) {
-
+      if (auto commandBuffer = renderer.beginFrame()) {
         // begin offscreen shadow pass
         // render shadow casting objects
         // end offscreen shadow pass
@@ -64,15 +62,15 @@ namespace world {
     auto flatVase = GameObject::createGameObject();
     flatVase.model = model;
     flatVase.transform.translation = {-0.9f, 0.5f, 2.5f};
-    flatVase.transform.scale = glm::vec3{6.f, 3.f, 6.f};
+    flatVase.transform.scale = glm::vec3 {6.f, 3.f, 6.f};
     gameObjects.push_back(std::move(flatVase));
 
     model = Model::createModelFromFile(device, "../models/smooth_vase.obj");
     auto smoothVase = GameObject::createGameObject();
     smoothVase.model = model;
     smoothVase.transform.translation = {0.9f, 0.5f, 2.5f};
-    smoothVase.transform.scale = glm::vec3{6.f, 3.f, 6.f};
+    smoothVase.transform.scale = glm::vec3 {6.f, 3.f, 6.f};
     gameObjects.push_back(std::move(smoothVase));
   }
 
-}
+} // namespace world

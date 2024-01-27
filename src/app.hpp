@@ -1,34 +1,36 @@
 #pragma once
 
-#include "window.hpp"
 #include "device.hpp"
 #include "gameobject.hpp"
 #include "renderer.hpp"
+#include "window.hpp"
 
 #include <memory>
 #include <vector>
 
 namespace world {
   class App {
-    public:
-      static constexpr int WIDTH = 800;
-      static constexpr int HEIGHT = 600;
+  public:
 
-      App();
-      ~App();
+    static constexpr int WIDTH = 800;
+    static constexpr int HEIGHT = 600;
 
-      App(const App &) = delete;
-      App &operator=(const App &) = delete;
+    App();
+    ~App();
 
-      void run();
+    App(const App&) = delete;
+    App& operator=(const App&) = delete;
 
-    private:
-      void loadGameObjects();
+    void run();
 
-      Window window {WIDTH, HEIGHT, "Hello Vulkan!"};
-      Device device {window};
-      Renderer renderer{window, device};
+  private:
 
-      std::vector<GameObject> gameObjects;
+    void loadGameObjects();
+
+    Window window {WIDTH, HEIGHT, "Hello Vulkan!"};
+    Device device {window};
+    Renderer renderer {window, device};
+
+    std::vector<GameObject> gameObjects;
   };
-}
+} // namespace world

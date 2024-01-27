@@ -1,35 +1,33 @@
 #pragma once
 
-#include "pipeline.hpp"
+#include "camera.hpp"
 #include "device.hpp"
 #include "gameobject.hpp"
-#include "camera.hpp"
+#include "pipeline.hpp"
 
 #include <memory>
 #include <vector>
 
 namespace world {
   class SimpleRenderSystem {
-    public:
-      SimpleRenderSystem(Device& device, VkRenderPass renderPass);
-      ~SimpleRenderSystem();
+  public:
 
-      SimpleRenderSystem(const SimpleRenderSystem &) = delete;
-      SimpleRenderSystem &operator=(const SimpleRenderSystem &) = delete;
+    SimpleRenderSystem(Device& device, VkRenderPass renderPass);
+    ~SimpleRenderSystem();
 
-      void renderGameObjects(
-        VkCommandBuffer commandBuffer,
-        std::vector<GameObject>& gameObjects,
-        const Camera& camera
-      );
+    SimpleRenderSystem(const SimpleRenderSystem&) = delete;
+    SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-    private:
-      void createPipelineLayout();
-      void createPipeline(VkRenderPass renderPass);
+    void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject>& gameObjects, const Camera& camera);
 
-      Device& device;
+  private:
 
-      std::unique_ptr<Pipeline> pipeline;
-      VkPipelineLayout pipelineLayout;
+    void createPipelineLayout();
+    void createPipeline(VkRenderPass renderPass);
+
+    Device& device;
+
+    std::unique_ptr<Pipeline> pipeline;
+    VkPipelineLayout pipelineLayout;
   };
-}
+} // namespace world
