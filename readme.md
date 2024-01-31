@@ -15,3 +15,5 @@ https://github.com/g-truc/glm/releases
 
 ## Installing clang-format
 npm install -g clang-format
+
+https://clang.llvm.org/docs/ClangFormatStyleOptions.html

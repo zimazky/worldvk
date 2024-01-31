@@ -8,7 +8,8 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"${workspaceRoot}/src/*.cpp",
+				//"${workspaceRoot}/src/*.cpp",
+				"${workspaceRoot}/src/core/*.cpp",
 			
 				"--std=c++17",
 
@@ -28,7 +29,7 @@
 				"${workspaceRoot}/build/${workspaceFolderBasename}.exe"
 			],
 			"options": {
-				"cwd": "${fileDirname}"
+				"cwd": "${workspaceRoot}/build"
 			},
 			"group": {
 				"kind": "build",
