@@ -33,12 +33,25 @@
 			},
 			"group": {
 				"kind": "build",
-				"isDefault": true
+				"isDefault": false
 			},
 			"problemMatcher": [
 				"$gcc"
 			],
 			"detail": "Задача создана отладчиком."
+		},
+		{
+			"type": "shell",
+			"label": "make: Engine build",
+			"command": "make",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceRoot}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }
