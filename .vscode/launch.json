@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+    /*
     {
       "name": "(gdb) Launch",
       "type": "cppdbg",
@@ -51,6 +52,33 @@
         }
       ],
       "preLaunchTask": "C/C++: g++.exe сборка активного файла"
+    },
+    */
+    {
+      "name": "make: run",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/build/engine.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/build",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "${workspaceFolder}/../dependencies/w64devkit/bin/gdb.exe",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "make: Engine build"
     }
   ]
 }

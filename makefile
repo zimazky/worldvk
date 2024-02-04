@@ -10,12 +10,14 @@ TARGET := $(ASSEMBLY)$(EXTENTION)
 CFLAGS := -Wall -g -std=c++17 -O2 -I./src -I$(VULKAN_SDK_PATH)/Include -I$(GLFW_PATH)/include -I$(TINYOBJ_PATH)
 LDFLAGS := -L$(VULKAN_SDK_PATH)/Lib -L$(GLFW_PATH)/lib-mingw-w64 -lvulkan-1 -lglfw3 -lgdi32 -static
 
-SRC_FILES := $(shell find src -type f -name "*.cpp")
-SRC_DIRECTORIES := $(shell find src -type d -name "*")
+SRC_FILES := $(shell find engine/src -type f -name "*.cpp")
+SRC_DIRECTORIES := $(shell find engine/src -type d -name "*")
 OBJ_DIRECTORIES := $(addprefix $(OBJ_DIR)/, $(SRC_DIRECTORIES))
 OBJ_FILES := $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.cpp=.o))
 
 all: scaffold link assets spv
+
+postbuild: assets spv
 
 ###############################################################################
 # Scaffolding folder structure

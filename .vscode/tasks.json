@@ -1,6 +1,7 @@
 {
 	"version": "2.0.0",
 	"tasks": [
+		/*
 		{
 			"type": "cppbuild",
 			"label": "C/C++: g++.exe сборка активного файла",
@@ -40,9 +41,10 @@
 			],
 			"detail": "Задача создана отладчиком."
 		},
+		*/
 		{
 			"type": "shell",
-			"label": "make: Engine build",
+			"label": "make: build engine",
 			"command": "make",
 			"args": [],
 			"options": {
@@ -51,6 +53,32 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			}
+		},
+		{
+			"type": "shell",
+			"label": "make: post-build engine (get assets)",
+			"command": "make postbuild",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceRoot}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"type": "shell",
+			"label": "make: clear engine",
+			"command": "make clear",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceRoot}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
 			}
 		}
 	]
