@@ -9,14 +9,11 @@
 #include <vector>
 
 namespace world {
-  class SimpleRenderSystem {
+  class SimpleRenderSystem : public NonCopyable {
   public:
 
     SimpleRenderSystem(Device& device, VkRenderPass renderPass);
-    ~SimpleRenderSystem();
-
-    SimpleRenderSystem(const SimpleRenderSystem&) = delete;
-    SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
+    ~SimpleRenderSystem() override;
 
     void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<GameObject>& gameObjects, const Camera& camera);
 
@@ -28,6 +25,6 @@ namespace world {
     Device& device;
 
     std::unique_ptr<Pipeline> pipeline;
-    VkPipelineLayout pipelineLayout;
+    VkPipelineLayout pipelineLayout {};
   };
 } // namespace world

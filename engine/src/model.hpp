@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace world {
-  class Model {
+  class Model : public NonCopyable {
   public:
 
     struct Vertex {
@@ -17,10 +17,10 @@ namespace world {
       glm::vec3 color;
       glm::vec3 normal {};
       glm::vec2 uv {};
-      static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
-      static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
+      static auto getBindingDescriptions() -> std::vector<VkVertexInputBindingDescription>;
+      static auto getAttributeDescriptions() -> std::vector<VkVertexInputAttributeDescription>;
 
-      bool operator==(const Vertex& other) const {
+      auto operator==(const Vertex& other) const -> bool {
         return position == other.position && color == other.color && normal == other.normal && uv == other.uv;
       }
     };
@@ -33,12 +33,9 @@ namespace world {
     };
 
     Model(Device& device, const Model::Builder& builder);
-    ~Model();
+    ~Model() override;
 
-    Model(const Model&) = delete;
-    Model& operator=(const Model&) = delete;
-
-    static std::unique_ptr<Model> createModelFromFile(Device& device, const std::string& filepath);
+    static auto createModelFromFile(Device& device, const std::string& filepath) -> std::unique_ptr<Model>;
 
     void bind(VkCommandBuffer commandBuffer);
     void draw(VkCommandBuffer commandBuffer);
@@ -49,13 +46,13 @@ namespace world {
     void createIndexBuffers(const std::vector<uint32_t>& indices);
 
     Device& device;
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
-    uint32_t vertexCount;
+    VkBuffer vertexBuffer {};
+    VkDeviceMemory vertexBufferMemory {};
+    uint32_t vertexCount {};
 
     bool hasIndexBuffer = false;
-    VkBuffer indexBuffer;
-    VkDeviceMemory indexBufferMemory;
-    uint32_t indexCount;
+    VkBuffer indexBuffer {};
+    VkDeviceMemory indexBufferMemory {};
+    uint32_t indexCount {};
   };
 } // namespace world

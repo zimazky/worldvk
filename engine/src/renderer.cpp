@@ -52,7 +52,7 @@ namespace world {
     commandBuffers.clear();
   }
 
-  VkCommandBuffer Renderer::beginFrame() {
+  auto Renderer::beginFrame() -> VkCommandBuffer {
     assert(!isFrameStarted && "Can't call beginFrame while frame already in progress");
     auto result = swapChain->acquireNextImage(&currentImageIndex);
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {

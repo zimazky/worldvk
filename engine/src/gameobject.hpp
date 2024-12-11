@@ -13,8 +13,8 @@ namespace world {
     glm::vec3 rotation {};
 
     // translate * Ry * Rx * Rz * scale
-    glm::mat4 mat4();
-    glm::mat3 normalMatrix();
+    auto mat4() -> glm::mat4;
+    auto normalMatrix() -> glm::mat3;
   };
 
   class GameObject {
@@ -22,17 +22,17 @@ namespace world {
 
     using id_t = unsigned int;
 
-    static GameObject createGameObject() {
+    static auto createGameObject() -> GameObject {
       static id_t currentId = 0;
       return GameObject {currentId++};
     }
 
     GameObject(const GameObject&) = delete;
-    GameObject& operator=(const GameObject&) = delete;
+    auto operator=(const GameObject&) -> GameObject& = delete;
     GameObject(GameObject&&) = default;
-    GameObject& operator=(GameObject&&) = default;
+    auto operator=(GameObject&&) -> GameObject& = default;
 
-    id_t getId() { return id; }
+    auto getId() -> id_t { return id; }
 
     std::shared_ptr<Model> model {};
     glm::vec3 color {};

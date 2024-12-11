@@ -20,7 +20,7 @@ namespace world {
     vkDestroyPipeline(device.device(), graphicsPipeline, nullptr);
   }
 
-  std::vector<char> Pipeline::readFile(const std::string& filepath) {
+  auto Pipeline::readFile(const std::string& filepath) -> std::vector<char> {
     std::ifstream file {filepath, std::ios::ate | std::ios::binary};
     if (!file.is_open()) { throw std::runtime_error("Failed to open file: " + filepath); }
     size_t fileSize = static_cast<size_t>(file.tellg());

@@ -1,10 +1,11 @@
 #include "window.hpp"
 
 #include <stdexcept>
+#include <utility>
 
 namespace world {
 
-  Window::Window(int w, int h, std::string name) : width {w}, height {h}, windowName {name} { initWindow(); }
+  Window::Window(int w, int h, std::string name) : width {w}, height {h}, windowName {std::move(name)} { initWindow(); }
 
   Window::~Window() {
     glfwDestroyWindow(window);

@@ -78,7 +78,7 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "make: Engine build"
+      "preLaunchTask": "make: build engine"
     }
   ]
 }

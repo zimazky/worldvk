@@ -8,23 +8,23 @@
 namespace world {
 
   // local callback functions
-  static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+  static VKAPI_ATTR auto VKAPI_CALL debugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT messageType,
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData
-  ) {
+  ) -> VkBool32 {
     std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
 
     return VK_FALSE;
   }
 
-  VkResult CreateDebugUtilsMessengerEXT(
+  auto CreateDebugUtilsMessengerEXT(
     VkInstance instance,
     const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
     const VkAllocationCallbacks* pAllocator,
     VkDebugUtilsMessengerEXT* pDebugMessenger
-  ) {
+  ) -> VkResult {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
       return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
@@ -173,7 +173,7 @@ namespace world {
 
   void Device::createSurface() { window.createWindowSurface(instance, &surface_); }
 
-  bool Device::isDeviceSuitable(VkPhysicalDevice device) {
+  auto Device::isDeviceSuitable(VkPhysicalDevice device) -> bool {
     QueueFamilyIndices indices = findQueueFamilies(device);
 
     bool extensionsSupported = checkDeviceExtensionSupport(device);
@@ -208,8 +208,8 @@ namespace world {
     }
   }
 
-  bool Device::checkValidationLayerSupport() {
-    uint32_t layerCount;
+  auto Device::checkValidationLayerSupport() -> bool {
+    uint32_t layerCount = 0;
     vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
     std::vector<VkLayerProperties> availableLayers(layerCount);
@@ -231,9 +231,9 @@ namespace world {
     return true;
   }
 
-  std::vector<const char*> Device::getRequiredExtensions() {
+  auto Device::getRequiredExtensions() -> std::vector<const char*> {
     uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
+    const char** glfwExtensions = nullptr;
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
@@ -264,8 +264,8 @@ namespace world {
     }
   }
 
-  bool Device::checkDeviceExtensionSupport(VkPhysicalDevice device) {
-    uint32_t extensionCount;
+  auto Device::checkDeviceExtensionSupport(VkPhysicalDevice device) -> bool {
+    uint32_t extensionCount = 0;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
@@ -278,7 +278,7 @@ namespace world {
     return requiredExtensions.empty();
   }
 
-  QueueFamilyIndices Device::findQueueFamilies(VkPhysicalDevice device) {
+  auto Device::findQueueFamilies(VkPhysicalDevice device) -> QueueFamilyIndices {
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;
@@ -307,11 +307,11 @@ namespace world {
     return indices;
   }
 
-  SwapChainSupportDetails Device::querySwapChainSupport(VkPhysicalDevice device) {
+  auto Device::querySwapChainSupport(VkPhysicalDevice device) -> SwapChainSupportDetails {
     SwapChainSupportDetails details;
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface_, &details.capabilities);
 
-    uint32_t formatCount;
+    uint32_t formatCount = 0;
     vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface_, &formatCount, nullptr);
 
     if (formatCount != 0) {
@@ -319,7 +319,7 @@ namespace world {
       vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface_, &formatCount, details.formats.data());
     }
 
-    uint32_t presentModeCount;
+    uint32_t presentModeCount = 0;
     vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface_, &presentModeCount, nullptr);
 
     if (presentModeCount != 0) {
@@ -329,7 +329,8 @@ namespace world {
     return details;
   }
 
-  VkFormat Device::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
+  auto Device::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+    -> VkFormat {
     for (VkFormat format : candidates) {
       VkFormatProperties props;
       vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &props);
@@ -343,7 +344,7 @@ namespace world {
     throw std::runtime_error("failed to find supported format!");
   }
 
-  uint32_t Device::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+  auto Device::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) -> uint32_t {
     VkPhysicalDeviceMemoryProperties memProperties;
     vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
@@ -379,13 +380,13 @@ namespace world {
     vkBindBufferMemory(device_, buffer, bufferMemory, 0);
   }
 
-  VkCommandBuffer Device::beginSingleTimeCommands() {
+  auto Device::beginSingleTimeCommands() -> VkCommandBuffer {
     VkCommandBufferAllocateInfo allocInfo {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandPool = commandPool;
     allocInfo.commandBufferCount = 1;
 
-    VkCommandBuffer commandBuffer;
+    VkCommandBuffer commandBuffer = nullptr;
     vkAllocateCommandBuffers(device_, &allocInfo, &commandBuffer);
 
     VkCommandBufferBeginInfo beginInfo {VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};

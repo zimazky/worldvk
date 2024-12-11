@@ -9,29 +9,26 @@
 #include <vector>
 
 namespace world {
-  class Renderer {
+  class Renderer : public NonCopyable {
   public:
 
     Renderer(Window& window, Device& device);
-    ~Renderer();
+    ~Renderer() override;
 
-    Renderer(const Renderer&) = delete;
-    Renderer& operator=(const Renderer&) = delete;
-
-    VkRenderPass getSwapChainRenderPass() const { return swapChain->getRenderPass(); }
-    float getAspectRatio() const { return swapChain->extentAspectRatio(); }
-    bool isFrameInProgress() const { return isFrameStarted; }
-    VkCommandBuffer getCurrentCommandBuffer() const {
+    [[nodiscard]] auto getSwapChainRenderPass() const -> VkRenderPass { return swapChain->getRenderPass(); }
+    [[nodiscard]] auto getAspectRatio() const -> float { return swapChain->extentAspectRatio(); }
+    [[nodiscard]] auto isFrameInProgress() const -> bool { return isFrameStarted; }
+    [[nodiscard]] auto getCurrentCommandBuffer() const -> VkCommandBuffer {
       assert(isFrameStarted && "Cannot get command buffer when frame not in progress");
       return commandBuffers[currentFrameIndex];
     }
 
-    int getFrameIndex() const {
+    [[nodiscard]] auto getFrameIndex() const -> int {
       assert(isFrameStarted && "Cannot get frame index when frame not in progress");
       return currentFrameIndex;
     }
 
-    VkCommandBuffer beginFrame();
+    auto beginFrame() -> VkCommandBuffer;
     void endFrame();
     void beginSwapChainRenderPass(VkCommandBuffer commandBuffer);
     void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
@@ -47,7 +44,7 @@ namespace world {
     std::unique_ptr<SwapChain> swapChain;
     std::vector<VkCommandBuffer> commandBuffers;
 
-    uint32_t currentImageIndex;
+    uint32_t currentImageIndex {};
     int currentFrameIndex {0};
     bool isFrameStarted {false};
   };

@@ -56,7 +56,7 @@ namespace world {
     }
   }
 
-  VkResult SwapChain::acquireNextImage(uint32_t* imageIndex) {
+  auto SwapChain::acquireNextImage(uint32_t* imageIndex) -> VkResult {
     vkWaitForFences(device.device(), 1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
     VkResult result = vkAcquireNextImageKHR(
@@ -71,7 +71,7 @@ namespace world {
     return result;
   }
 
-  VkResult SwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex) {
+  auto SwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex) -> VkResult {
     if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE) {
       vkWaitForFences(device.device(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
@@ -334,7 +334,7 @@ namespace world {
     }
   }
 
-  VkSurfaceFormatKHR SwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+  auto SwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) -> VkSurfaceFormatKHR {
     for (const auto& availableFormat : availableFormats) {
       if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
         return availableFormat;
@@ -344,7 +344,7 @@ namespace world {
     return availableFormats[0];
   }
 
-  VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
+  auto SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) -> VkPresentModeKHR {
     for (const auto& availablePresentMode : availablePresentModes) {
       if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
         std::cout << "Present mode: Mailbox" << std::endl;
@@ -363,7 +363,7 @@ namespace world {
     return VK_PRESENT_MODE_FIFO_KHR;
   }
 
-  VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+  auto SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) -> VkExtent2D {
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
       return capabilities.currentExtent;
     } else {
@@ -375,7 +375,7 @@ namespace world {
     }
   }
 
-  VkFormat SwapChain::findDepthFormat() {
+  auto SwapChain::findDepthFormat() -> VkFormat {
     return device.findSupportedFormat(
       {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
       VK_IMAGE_TILING_OPTIMAL,

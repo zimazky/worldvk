@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 
-int main() {
+auto main() -> int {
   world::App app {};
 
   try {

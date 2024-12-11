@@ -11,7 +11,7 @@
 
 namespace std {
   template<> struct hash<world::Model::Vertex> {
-    size_t operator()(const world::Model::Vertex& vertex) const {
+    auto operator()(const world::Model::Vertex& vertex) const -> size_t {
       size_t seed = 0;
       world::hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.uv);
       return seed;
@@ -36,7 +36,7 @@ namespace world {
     }
   }
 
-  std::unique_ptr<Model> Model::createModelFromFile(Device& device, const std::string& filepath) {
+  auto Model::createModelFromFile(Device& device, const std::string& filepath) -> std::unique_ptr<Model> {
     Builder builder {};
     builder.loadModel(filepath);
     return std::make_unique<Model>(device, builder);
@@ -47,8 +47,8 @@ namespace world {
     assert(vertexCount >= 3 && "Vertex count must be at least 3");
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
+    VkBuffer stagingBuffer = nullptr;
+    VkDeviceMemory stagingBufferMemory = nullptr;
     device.createBuffer(
       bufferSize,
       VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -56,7 +56,7 @@ namespace world {
       stagingBuffer,
       stagingBufferMemory
     );
-    void* data;
+    void* data = nullptr;
     vkMapMemory(device.device(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
     vkUnmapMemory(device.device(), stagingBufferMemory);
@@ -80,8 +80,8 @@ namespace world {
 
     VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
+    VkBuffer stagingBuffer = nullptr;
+    VkDeviceMemory stagingBufferMemory = nullptr;
     device.createBuffer(
       bufferSize,
       VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -89,7 +89,7 @@ namespace world {
       stagingBuffer,
       stagingBufferMemory
     );
-    void* data;
+    void* data = nullptr;
     vkMapMemory(device.device(), stagingBufferMemory, 0, bufferSize, 0, &data);
     memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
     vkUnmapMemory(device.device(), stagingBufferMemory);
@@ -118,7 +118,7 @@ namespace world {
     else vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
   }
 
-  std::vector<VkVertexInputBindingDescription> Model::Vertex::getBindingDescriptions() {
+  auto Model::Vertex::getBindingDescriptions() -> std::vector<VkVertexInputBindingDescription> {
     std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);
     bindingDescriptions[0].binding = 0;
     bindingDescriptions[0].stride = sizeof(Vertex);
@@ -126,7 +126,7 @@ namespace world {
     return bindingDescriptions;
   }
 
-  std::vector<VkVertexInputAttributeDescription> Model::Vertex::getAttributeDescriptions() {
+  auto Model::Vertex::getAttributeDescriptions() -> std::vector<VkVertexInputAttributeDescription> {
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions {};
     attributeDescriptions.push_back({0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)});
     attributeDescriptions.push_back({1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)});

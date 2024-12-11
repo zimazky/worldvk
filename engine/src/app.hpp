@@ -4,22 +4,20 @@
 #include "gameobject.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
+#include "noncopyable.hpp"
 
 #include <memory>
 #include <vector>
 
 namespace world {
-  class App {
+  class App : public NonCopyable {
   public:
 
     static constexpr int WIDTH = 800;
     static constexpr int HEIGHT = 600;
 
     App();
-    ~App();
-
-    App(const App&) = delete;
-    App& operator=(const App&) = delete;
+    ~App() override;
 
     void run();
 
